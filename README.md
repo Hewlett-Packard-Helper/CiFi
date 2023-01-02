@@ -1,10 +1,10 @@
-# HewlettHelper
-This is the documentation needed to use the HewlettHelper template and modify it to your needs.
+# CiFi
+This is the documentation needed to use the CiFi template and modify it to your needs.
 # How it works
 ## Language
-HewlettHelper uses the Discordjs language (uses node.js) to work properly.
+CiFi uses the Discordjs language (uses node.js) to work properly.
 ## Getting it online
-To get HewlettHelper online, you must input your token, and other ID's in these fields
+To get CiFi online, you must input your token, and other ID's in these fields
 
 ```json
 {
