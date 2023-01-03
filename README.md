@@ -31,5 +31,85 @@ To install DiscordJS from npm, use:
 sudo npm install discord.js
 ```
 I have no knowledge of installing DiscordJS on other operating systems.
-## Commands
+# Commands
 You can edit the commands as per the DiscordJS documentation.
+## What do they do
+### Ping
+```js
+const { SlashCommandBuilder } = require("discord.js");
+
+module.exports = {
+  data: new SlashCommandBuilder()
+      .setName('ping')
+      .setDescription('Replies with Pong!'),
+  async execute(interaction) {
+    await interaction.reply('Pong!');
+  },
+};
+```
+In this command, CiFi creates the "ping" command. This command then replies with "Pong!' upon use.
+### User
+```js
+const { SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder } = require('discord.js');
+
+module.exports = {
+  data: new SlashCommandBuilder()
+      .setName('user')
+      .setDescription('Provides user info'),
+  async execute(interaction) {
+    const exampleEmbed = new EmbedBuilder()
+	    .setColor(0x0099FF)
+	    .setTitle(`${interaction.member.user.username}`)
+	    .setAuthor({ name: 'CiFi'})
+	    .setDescription(`The server is ${interaction.guild.name}`)
+	    .addFields(
+		      { name: `${interaction.member.user.username}`, value:  `${interaction.member.user.username} Joined on ${new Date(interaction.member.joinedAt).toUTCString()}` },
+      )
+	    .setImage(`${interaction.member.user.displayAvatarURL()}`)
+	    .setTimestamp()
+	    .setFooter({ text: 'Coded by Hewlett Packard#9932'});
+
+    await interaction.reply({ embeds: [exampleEmbed] });
+  },
+};
+```
+This command is a little more complicated, but all it does is fetch the username of the user that used the command, when they joined, the server name, and their PFP, and sends it via an embed.
+### Pull
+(!This is still in development!)
+```js
+const { SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder } = require('discord.js');
+const cheerio = require('cheerio')
+
+async function getDataFromPage(url) {
+  const response = await fetch(url);
+  const data = await response.text();
+  const $ = cheerio.load(data);
+  const header = $('h1').text();
+  const paragraph = $('p').first().text();
+  return { header, paragraph };
+}
+
+module.exports = {
+  data: new SlashCommandBuilder()
+      .setName('pull')
+      .setDescription('Pulls data from a website using cheerio'),
+  async execute(interaction) {
+    const url = 'https://example.com';
+    const data = await getDataFromPage(url);
+    const exampleEmbed = new EmbedBuilder()
+      .setColor(0x0099FF)
+      .setTitle(`${interaction.member.user.username}`)
+      .setAuthor({ name: 'HewlettHelper', iconURL: 'https://i.imgur.com/BndcSnQ.png'})
+      .setDescription(`The server is ${interaction.guild.name}`)
+      .addFields(
+        { name: `${interaction.member.user.username}`, value:  `${interaction.member.user.username} Joined on ${new Date(interaction.member.joinedAt).toUTCString()}` },
+        { name: 'Header', value: data.header },
+        { name: 'Paragraph', value: data.paragraph },
+      )
+      .setImage(`${interaction.member.user.displayAvatarURL()}`)
+	  }
+	}
+```
+This command pulls the header and paragraph of a web page, then sends it via an embed. It looks similar to /user because this was pulled from User.
